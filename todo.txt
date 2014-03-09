@@ -1,0 +1,43 @@
+
+midio.js
+  midio.read(file)
+  midio.write(midi)
+
+midio.reader.js
+midio.writer.js
+midio.util.stream.js
+
+midi.enums.note
+midi.enum.instrument
+midi.enum.percussion
+midi.enum.controller
+
+
+----------------------------
+	To Do:
+----------------------------
+
+enums namespace
+add midi.enums.event
+remove underscore.js
+
+----------------------------
+
+
+var track = midio.createTrack(0, 'piano');
+
+
+event.delta
+event.value
+event.channel
+event.param1
+event.param2
+
+
+event.value
+event.description
+
+// channel
+event.channel
+event.velocity
+
