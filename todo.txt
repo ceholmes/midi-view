@@ -16,7 +16,7 @@ midi.enum.controller
 ----------------------------
 	To Do:
 ----------------------------
-
+Setup SCM in GitHub
 enums namespace
 add midi.enums.event
 remove underscore.js
