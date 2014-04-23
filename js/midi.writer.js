@@ -152,7 +152,6 @@ Midi.Writer = function () {
 		return bytes;
 	}
 
-
 	function channelEventBytes(time, channel, type, param1, param2) {
 
 		var bytes = variableLengthInt(time);
