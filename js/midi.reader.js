@@ -44,20 +44,6 @@ Midi.Reader = function () {
         tempo = tempo || { microsecondsPerBeat: (60000000 / 120) };
         timeSignature = timeSignature || { numerator: 4, denominator: 4 };
         
-        
-        //if (typeof (tempo) == "undefined")
-        //    tempo = { microsecondsPerBeat: (60000000 / 120) };
-
-        
-        // time signature
-        //var timeSignature = _.find(midi.tracks[0],
-		//	function (e) { return e.subtype == 'timeSignature'; });
-
-        //if (typeof (timeSignature) == "undefined")
-        //    timeSignature = { numerator: 4, denominator: 4 };
-
-        
-        
         var mcsPerBeat = tempo.microsecondsPerBeat;
         var beatsPerMeasure = timeSignature.numerator;
         var beatsPerMin = Math.floor(60000000 / mcsPerBeat);
