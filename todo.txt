@@ -24,6 +24,9 @@ remove underscore.js
 ----------------------------
 
 
+event.type      // track or meta
+event.command   // note on
+
 var track = midio.createTrack(0, 'piano');
 
 
