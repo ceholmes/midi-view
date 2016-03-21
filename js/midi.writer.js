@@ -49,58 +49,58 @@ Midi.Writer = function () {
 
 		var bytes = [];
 
-		switch (e.type) {
+		switch (e.command) {
 
 			case 0x01: // text
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x02: // copyright
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x03: // track name
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x04: // instrument
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x05: // lyric
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x06: // marker
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x07: // cue point
-				bytes = longMsgBytes(e.type, stringToBytes(e.text));
+				bytes = longMsgBytes(e.command, stringToBytes(e.text));
 				break;
 
 			case 0x8: // note off
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.note, e.velocity);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.note, e.velocity);
 				break;
 
 			case 0x9: // note on
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.note, e.velocity);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.note, e.velocity);
 				break;
 
 			case 0xA: // aftertouch
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.note, e.value);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.note, e.value);
 				break;
 
 			case 0xB: // controller
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.controller, e.value);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.controller, e.value);
 				break;
 
 			case 0xC: // program change
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.value);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.value);
 				break;
 
 			case 0xD: // channel aftertouch
-				bytes = shortMsgBytes(e.type, e.time, e.channel, e.value);
+				bytes = shortMsgBytes(e.command, e.time, e.channel, e.value);
 				break;
 
 			case 0xE: // pitch bend
@@ -137,25 +137,25 @@ Midi.Writer = function () {
 		return bytes;
 	}
 
-	function longMsgBytes(type, bytes) {
+	function longMsgBytes(command, bytes) {
 		var length = variableLengthInt(bytes.length);
-		return [].concat([0x0, 0xFF, type], length, bytes);
+		return [].concat([0x0, 0xFF, command], length, bytes);
 	}
 
-	function shortMsgBytes(type, time, channel, param1, param2) {
+	function shortMsgBytes(command, time, channel, param1, param2) {
 
 		var bytes = variableLengthInt(time);
-		bytes.push(parseInt(type.toString(16) + channel.toString(16), 16));
+		bytes.push(parseInt(command.toString(16) + channel.toString(16), 16));
 		bytes.push(param1);
 		if (param2) bytes.push(param2);
 
 		return bytes;
 	}
 
-	function channelEventBytes(time, channel, type, param1, param2) {
+	function channelEventBytes(time, channel, command, param1, param2) {
 
 		var bytes = variableLengthInt(time);
-		bytes.push(parseInt(type.toString(16) + channel.toString(16), 16));
+		bytes.push(parseInt(command.toString(16) + channel.toString(16), 16));
 		bytes.push(param1);
 		if (param2) bytes.push(param2);
 

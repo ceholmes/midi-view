@@ -7,7 +7,7 @@ Midi.Views.EventView = Backbone.View.extend({
 
 		this.options = _.extend(this.defaults, options);
 		this.options.types = _.extend(this.defaults.types, options.types);
-		this.options.subtypes = _.extend(this.defaults.subtypes, options.subtypes);
+		this.options.commands = _.extend(this.defaults.commands, options.commands);
 		this.options.columns = _.extend(this.defaults.columns, options.columns);
 	},
 
@@ -33,7 +33,7 @@ Midi.Views.EventView = Backbone.View.extend({
 			// events
 			_.each(track, function (event) {
 
-				if (self.options.types[event.type] === true && self.options.subtypes[event.subtype] === true) {
+				if (self.options.types[event.type] === true && self.options.commands[event.command] === true) {
 
 					var row = $("<tr></tr>");
 
@@ -41,9 +41,9 @@ Midi.Views.EventView = Backbone.View.extend({
 					$("<td>" + event.deltaTime + "</td>").appendTo(row);
 					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
 					$("<td>" + ((event.type == "channel") ? event.channel : "-") + "</td>").appendTo(row);
-					$("<td>" + (midiTypes[event.subtype] || event.subtype) + "</td>").appendTo(row);
+					$("<td>" + (midiTypes[event.command] || event.command) + "</td>").appendTo(row);
 
-					switch(event.subtype) {
+					switch(event.command) {
 
 						case "text":
 						case "copyrightNotice":
@@ -136,7 +136,7 @@ Midi.Views.EventView = Backbone.View.extend({
 			delta: true,
 			channel: true,
 			type: true,
-			subtype: true,
+			command: true,
 			data: true
 		},
 
@@ -145,7 +145,7 @@ Midi.Views.EventView = Backbone.View.extend({
 			channel: true
 		},
 
-		subtypes: {
+		commands: {
 			text: true,
 			copyrightNotice: true,
 			trackName: true,
@@ -176,7 +176,7 @@ Midi.Views.EventView = Backbone.View.extend({
 		meta: "meta",
 		channel: "chan",
 
-		// subtypes
+		// commands
 		text: "text",
 		copyrightNotice: "copyright",
 		trackName: "trk name",

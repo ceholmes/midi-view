@@ -35,7 +35,7 @@
 				<th>&#916;</th>
 				<th>Type</th>
 				<th>C</th>
-				<th>Subtype</th>
+				<th>Cmd</th>
 				<th>Data</th>
 				<th></th>
 			</thead>
@@ -80,29 +80,29 @@
 		// track
 		var track = [
 
-			{type:events.text, text:"Text"},
-			{type:events.copyright, text:"Copyright"},
-			{type:events.trackName, text:"Track Name"},
-			{type:events.instrument, text:"Instrument"},
-			{type:events.lyrics, text:"Lyrics"},
-			{type:events.marker, text:"Marker"},
-			{type:events.cuePoint, text:"Cue Point"},
+			{command:events.text, text:"Text"},
+			{command:events.copyright, text:"Copyright"},
+			{command:events.trackName, text:"Track Name"},
+			{command:events.instrument, text:"Instrument"},
+			{command:events.lyrics, text:"Lyrics"},
+			{command:events.marker, text:"Marker"},
+			{command:events.cuePoint, text:"Cue Point"},
 
-			{type:events.tempo, mcsPerBeat:400000},
+			{command:events.tempo, mcsPerBeat:400000},
 
-			{type:events.timeSig, numerator:6, denominator:8, metronome:24, thirtyseconds:8},
+			{command:events.timeSig, numerator:6, denominator:8, metronome:24, thirtyseconds:8},
 
-			{type:events.noteOn, time:0, channel:0, note:notes.c4, velocity:90},
-			{type:events.noteOff, time:128, channel:0, note:notes.c4, velocity:90},
+			{command:events.noteOn, time:0, channel:0, note:notes.c4, velocity:90},
+			{command:events.noteOff, time:128, channel:0, note:notes.c4, velocity:90},
 
-			{type:events.noteOn, time:0, channel:0, note:62, velocity:90},
-			{type:events.noteOff, time:128, channel:0, note:62, velocity:90},
+			{command:events.noteOn, time:0, channel:0, note:62, velocity:90},
+			{command:events.noteOff, time:128, channel:0, note:62, velocity:90},
 
-			{type:events.controller, time:0, channel:0, controller:7, value:128},
-			{type:events.aftertouch, time:0, channel:0, note:62, value:64},
-			{type:events.program, time:0, channel:0, value:36},
-			{type:events.channelAftertouch, time:0, channel:0, value:127},
-			{type:events.channelPrefix, time:0, channel:10},
+			{command:events.controller, time:0, channel:0, controller:7, value:128},
+			{command:events.aftertouch, time:0, channel:0, note:62, value:64},
+			{command:events.program, time:0, channel:0, value:36},
+			{command:events.channelAftertouch, time:0, channel:0, value:127},
+			{command:events.channelPrefix, time:0, channel:10},
 
 		];
 

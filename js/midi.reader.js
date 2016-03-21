@@ -27,16 +27,16 @@ Midi.Reader = function () {
         var midi = MidiFile(binary);
 
                                 
-        var tempo, timeSignature;
+        var tempo, timeSignature, i;
                                 
-        for (var i = 0; i < midi.tracks[0].length; i++) {
-            if (midi.tracks[0][i].subtype === 'setTempo') {
+        for (i = 0; i < midi.tracks[0].length; i++) {
+            if (midi.tracks[0][i].command === 'setTempo') {
                 tempo = midi.tracks[0][i]; break;
             }
         }
                                 
-        for (var i = 0; i < midi.tracks[0].length; i++) {
-            if (midi.tracks[0][i].subtype === 'timeSignature') {
+        for (i = 0; i < midi.tracks[0].length; i++) {
+            if (midi.tracks[0][i].command === 'timeSignature') {
                 timeSignature = midi.tracks[0][i]; break;
             }
         }
