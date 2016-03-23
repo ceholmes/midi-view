@@ -6,7 +6,7 @@ Javascript API for MIDI
 var track = {    
     name: 'The Track',
     copyright: 'Sojera',
-    text: 'Powered by Midio"
+    text: 'Powered by Midio'
 };    
     
 track.events = [
