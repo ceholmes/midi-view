@@ -27,13 +27,19 @@ Midi.Views.EventView = Backbone.View.extend({
 
 		var tbody = $("<tbody/>");
 
-		// tracks
-		_.each(this.model.tracks, function (track, index) {
+		// tracks		
+        this.model.tracks.forEach(function (track, index) {
 
-			// events
-			_.each(track, function (event) {
-
-				if (self.options.types[event.type] === true && self.options.commands[event.command] === true) {
+			// events			
+			track.forEach( function (event) {
+                
+                //var isVisible =
+                if  (
+                    ((self.options.types.meta && event.channel === undefined) ||
+                    (self.options.types.channel && event.channel !== undefined)) &&
+                    (self.options.commands[event.command] === true) 
+                ){
+				//if (isVisible) {
 
 					var row = $("<tr></tr>");
 

@@ -82,7 +82,7 @@ function MidiFile(data) {
 			if (eventTypeByte == 0xff) {
 
 				/* meta event */
-				event.type = 'meta';
+				//event.type = 'meta';
 				var commandByte = stream.readInt8();
 				length = stream.readVarInt();
 
@@ -212,7 +212,7 @@ function MidiFile(data) {
 
 			var eventType = eventTypeByte >> 4;
 			event.channel = eventTypeByte & 0x0f;
-			event.type = 'channel';
+			//event.type = 'channel';
 
 			switch (eventType) {
 				case 0x08:
