@@ -193,7 +193,6 @@ function MidiFile(data) {
 				throw "Unrecognised MIDI event type byte: " + eventTypeByte;
 			}
 
-
 		/* channel event */
 		} else {
 

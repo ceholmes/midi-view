@@ -32,15 +32,11 @@ Midi.Views.EventView = Backbone.View.extend({
 
 			// events			
 			track.forEach( function (event) {
-                
-                //var isVisible =
-                if  (
-                    ((self.options.types.meta && event.channel === undefined) ||
+                                
+                if  (((self.options.types.meta && event.channel === undefined) ||
                     (self.options.types.channel && event.channel !== undefined)) &&
-                    (self.options.commands[event.command] === true) 
-                ){
-				//if (isVisible) {
-
+                    (self.options.commands[event.command] === true) ) {
+				
 					var row = $("<tr></tr>");
 
 					$("<td>" + index + "</td>").appendTo(row);
