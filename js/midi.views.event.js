@@ -46,17 +46,17 @@ Midi.Views.EventView = Backbone.View.extend({
 					switch(event.command) {
 
 						case "text":
-						case "copyrightNotice":
-						case "trackName":
-						case "instrumentName":
+						case "copyright":
+						case "track-name":
+						case "instrument":
 						case "lyrics":
 						case "marker":
-						case "cuePoint":
+						case "cue-point":
 							$("<td colspan='2'>" + event.text + "</td>").appendTo(row);
 							break;
 
-						case "noteOn":
-						case "noteOff":
+						case "note-on":
+						case "note-off":
 							if (self.options.noteNames) {
 								var name = (event.channel == 9) ? percussion[event.noteNumber].toLowerCase() : notes[event.noteNumber];
 								$("<td>" + name + "</td><td>vel: " + event.velocity + "</td>").appendTo(row);
@@ -66,7 +66,7 @@ Midi.Views.EventView = Backbone.View.extend({
 							}
 							break;
 
-						case "noteAftertouch":
+						case "note-after-touch":
 							$("<td>" + notes[event.noteNumber] + "</td>" + "<td>val: " + event.amount + "</td>").appendTo(row);
 							break;
 
@@ -75,45 +75,44 @@ Midi.Views.EventView = Backbone.View.extend({
 								"<td>val: " + event.value + "</td>").appendTo(row);
 							break;
 
-						case "programChange":
+						case "program-change":
 							$("<td colspan='2'>" + instruments[event.programNumber] + "</td>").appendTo(row);
 							break;
 
-						case "channelAftertouch":
+						case "channel-aftertouch":
 							$("<td colspan='2'>" + event.amount + "</td>").appendTo(row);
 							break;
 
-						case "pitchBend":
+						case "pitch-bend":
 							break;
 
-						case "midiChannelPrefix":
+						case "midi-channel-prefix":
 							$("<td colspan='2'>" + event.channel + "</td>").appendTo(row);
 							break;
 
-						case "endOfTrack" :
+						case "end-of-track" :
 							$("<td colspan='2'>-</td>").appendTo(row);
 							break;
 
-						case "setTempo":
+						case "set-tempo":
 							$("<td colspan='2'>" + event.microsecondsPerBeat + " mpb</td>").appendTo(row);
 							break;
 
-						case "smpteOffset":
+						case "smpte-offset":
 							$("<td colspan='2'>" + event.frameRate + " fps</td>").appendTo(row);
 							break;
 
-						case "timeSignature":
+						case "time-signature":
 							$("<td colspan='2'>" + event.numerator + "/" + event.denominator  + "</td>").appendTo(row);
 							break;
 
-						case "keySignature":
+						case "key-signature":
 							$("<td colspan='2'>" + "scale: " + event.scale + "&nbsp;&nbsp;" + "key: " +
 								event.key + " " + "</td>").appendTo(row);
 							break;
 
 						case "sequence":
 							break;
-
 					}
 
 					$(tbody).append(row);
@@ -122,85 +121,79 @@ Midi.Views.EventView = Backbone.View.extend({
 			});
 		});
 
-
 		$(this.el).append(tbody);
-
-
 	},
 
 	defaults: {
-		noteNames : true,
+		"noteNames" : true,
 
 		columns : {
-			track: true,
-			delta: true,
-			channel: true,
-			type: true,
-			command: true,
-			data: true
+			"track": true,
+			"delta": true,
+			"channel": true,
+			"type": true,
+			"command": true,
+			"data": true
 		},
 
 		types: {
-			meta: true,
-			channel: true
+			"meta": true,
+			"channel": true
 		},
 
 		commands: {
-			text: true,
-			copyrightNotice: true,
-			trackName: true,
-			instrumentName: true,
-			lyrics: true,
-			marker: true,
-			cuePoint: true,
-			noteOn: true,
-			noteOff: true,
-			noteAftertouch: true,
-			controller: true,
-			programChange: true,
-			channelAftertouch: true,
-			pitchBend: true,
-			midiChannelPrefix: true,
-			endOfTrack: true,
-			setTempo: true,
-			smpteOffset: true,
-			timeSignature: true,
-			keySignature: true,
-			sequence: true
+			"text": true,
+			"copyright": true,
+			"track-name": true,
+			"instrument": true,
+			"lyrics": true,
+			"marker": true,
+			"cue-point": true,
+			"note-on": true,
+			"note-off": true,
+			"note-aftertouch": true,
+			"controller": true,
+			"program-change": true,
+			"channel-aftertouch": true,
+			"pitch-bend": true,
+			"midi-channel-prefix": true,
+			"end-of-track": true,
+			"set-tempo": true,
+			"smpte-offset": true,
+			"time-signature": true,
+			"key-signature": true,
+			"sequence": true
 		}
 	},
 
 	midiTypes : {
 
 		// types
-		meta: "meta",
-		channel: "chan",
+		"meta":    "meta",
+		"channel": "chan",
 
 		// commands
-		text: "text",
-		copyrightNotice: "copyright",
-		trackName: "trk name",
-		instrumentName: "Inst",
-		lyrics: "lyrics",
-		marker: "marker",
-		cuePoint: "cue",
-		noteOn: "note on",
-		noteOff: "note off",
-		noteAftertouch: "after touch",
-		controller: "controller",
-		programChange: "program",
-		channelAftertouch: "ch aftertouch",
-		pitchBend: "pitch bend",
-		midiChannelPrefix: "ch prefix",
-		endOfTrack: "trk end",
-		setTempo: "tempo",
-		smpteOffset: "smtp",
-		timeSignature: "time sig",
-		keySignature: "key sig",
-		sequence: "sequence"
+		"text":                "text",
+		"copyright":           "copyright",
+		"track-name":          "trk name",
+		"instrument":          "Inst",
+		"lyrics":              "lyrics",
+		"marker":              "marker",
+		"cue-point":           "cue",
+		"note-on":             "note on",
+		"note-off":            "note off",
+		"note-aftertouch":     "after touch",
+		"controller":          "controller",
+		"program-change":      "program",
+		"channel-aftertouch":  "ch aftertouch",
+		"pitch-bend":          "pitch bend",
+		"midi-channel-prefix": "ch prefix",
+		"end-of-track":        "trk end",
+		"set-tempo":           "tempo",
+		"smpte-offset":        "smtp",
+		"time-signature":      "time sig",
+		"key-signature":       "key sig",
+		"sequence":            "sequence"
 	}
-
-	//events: {}
-
-
+    
 });

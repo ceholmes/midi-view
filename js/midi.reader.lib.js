@@ -2,12 +2,10 @@
 
 function MidiFile(data) {
 
-
 	var lastEventTypeByte;
 
 	// create stream
 	stream = Stream(data);
-
 
 	// read header
 	var headerChunk = readChunk(stream);
@@ -33,7 +31,6 @@ function MidiFile(data) {
 		'ticksPerBeat': ticksPerBeat
 	};
 
-
 	// read tracks
     var tracks = [];
 
@@ -58,7 +55,6 @@ function MidiFile(data) {
 		'header': header,
 		'tracks': tracks
 	};
-
 
 
 	function readChunk(stream) {
@@ -92,8 +88,8 @@ function MidiFile(data) {
 
 				switch(commandByte) {
 					case 0x00:
-						event.command = 'sequenceNumber';
-						if (length != 2) throw "Expected length for sequenceNumber event is 2, got " + length;
+						event.command = 'sequence-number';
+						if (length != 2) throw "Expected length for sequence-number event is 2, got " + length;
 						event.number = stream.readInt16();
 						return event;
 					case 0x01:
@@ -101,15 +97,15 @@ function MidiFile(data) {
 						event.text = stream.read(length);
 						return event;
 					case 0x02:
-						event.command = 'copyrightNotice';
+						event.command = 'copyright';
 						event.text = stream.read(length);
 						return event;
 					case 0x03:
-						event.command = 'trackName';
+						event.command = 'track-name';
 						event.text = stream.read(length);
 						return event;
 					case 0x04:
-						event.command = 'instrumentName';
+						event.command = 'instrument';
 						event.text = stream.read(length);
 						return event;
 					case 0x05:
@@ -121,21 +117,21 @@ function MidiFile(data) {
 						event.text = stream.read(length);
 						return event;
 					case 0x07:
-						event.command = 'cuePoint';
+						event.command = 'cue-point';
 						event.text = stream.read(length);
 						return event;
 					case 0x20:
-						event.command = 'midiChannelPrefix';
-						if (length != 1) throw "Expected length for midiChannelPrefix event is 1, got " + length;
+						event.command = 'midi-channel-prefix';
+						if (length != 1) throw "Expected length for midi-channel-prefix event is 1, got " + length;
 						event.channel = stream.readInt8();
 						return event;
 					case 0x2f:
-						event.command = 'endOfTrack';
-						if (length !== 0) throw "Expected length for endOfTrack event is 0, got " + length;
+						event.command = 'end-of-track';
+						if (length !== 0) throw "Expected length for end-of-track event is 0, got " + length;
 						return event;
 					case 0x51:
-						event.command = 'setTempo';
-						if (length != 3) throw "Expected length for setTempo event is 3, got " + length;
+						event.command = 'set-tempo';
+						if (length != 3) throw "Expected length for set-tempo event is 3, got " + length;
 						event.microsecondsPerBeat = (
 							(stream.readInt8() << 16) +
 							(stream.readInt8() << 8) +
@@ -143,12 +139,10 @@ function MidiFile(data) {
 						);
 						return event;
 					case 0x54:
-						event.command = 'smpteOffset';
-						if (length != 5) throw "Expected length for smpteOffset event is 5, got " + length;
+						event.command = 'smpte-offset';
+						if (length != 5) throw "Expected length for smpte-offset event is 5, got " + length;
 						var hourByte = stream.readInt8();
-						event.frameRate = {
-							0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30
-						}[hourByte & 0x60];
+						event.frameRate = { 0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30 }[hourByte & 0x60];
 						event.hour = hourByte & 0x1f;
 						event.min = stream.readInt8();
 						event.sec = stream.readInt8();
@@ -156,21 +150,21 @@ function MidiFile(data) {
 						event.subframe = stream.readInt8();
 						return event;
 					case 0x58:
-						event.command = 'timeSignature';
-						if (length != 4) throw "Expected length for timeSignature event is 4, got " + length;
+						event.command = 'time-signature';
+						if (length != 4) throw "Expected length for time-signature event is 4, got " + length;
 						event.numerator = stream.readInt8();
 						event.denominator = Math.pow(2, stream.readInt8());
 						event.metronome = stream.readInt8();
 						event.thirtyseconds = stream.readInt8();
 						return event;
 					case 0x59:
-						event.command = 'keySignature';
-						if (length != 2) throw "Expected length for keySignature event is 2, got " + length;
+						event.command = 'key-signature';
+						if (length != 2) throw "Expected length for key-signature event is 2, got " + length;
 						event.key = stream.readInt8();
 						event.scale = stream.readInt8();
 						return event;
 					case 0x7f:
-						event.command = 'sequencerSpecific';
+						event.command = 'sequencer-specific';
 						event.data = stream.read(length);
 						return event;
 					default:
@@ -180,17 +174,17 @@ function MidiFile(data) {
 						return event;
 				}
 
-                event.data = stream.read(length);
-				return event;
+                //event.data = stream.read(length);
+				//return event;
 
 			} else if (eventTypeByte == 0xf0) {
-				event.type = 'sysEx';
+				event.type = 'system-exclusive';
 				length = stream.readVarInt();
 				event.data = stream.read(length);
 				return event;
 
 			} else if (eventTypeByte == 0xf7) {
-				event.type = 'dividedSysEx';
+				event.type = 'divided-system-exclusive';
 				length = stream.readVarInt();
 				event.data = stream.read(length);
 				return event;
@@ -222,7 +216,7 @@ function MidiFile(data) {
 
 			switch (eventType) {
 				case 0x08:
-					event.command = 'noteOff';
+					event.command = 'note-off';
 					event.noteNumber = param1;
 					event.velocity = stream.readInt8();
 					return event;
@@ -230,13 +224,13 @@ function MidiFile(data) {
 					event.noteNumber = param1;
 					event.velocity = stream.readInt8();
 					if (event.velocity === 0) {
-						event.command = 'noteOff';
+						event.command = 'note-off';
 					} else {
-						event.command = 'noteOn';
+						event.command = 'note-on';
 					}
 					return event;
 				case 0x0a:
-					event.command = 'noteAftertouch';
+					event.command = 'note-aftertouch';
 					event.noteNumber = param1;
 					event.amount = stream.readInt8();
 					return event;
@@ -246,15 +240,15 @@ function MidiFile(data) {
 					event.value = stream.readInt8();
 					return event;
 				case 0x0c:
-					event.command = 'programChange';
+					event.command = 'program-change';
 					event.programNumber = param1;
 					return event;
 				case 0x0d:
-					event.command = 'channelAftertouch';
+					event.command = 'channel-aftertouch';
 					event.amount = param1;
 					return event;
 				case 0x0e:
-					event.command = 'pitchBend';
+					event.command = 'pitch-bend';
 					event.value = param1 + (stream.readInt8() << 7);
 					return event;
 				default:

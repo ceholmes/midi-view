@@ -69,11 +69,11 @@
 			<input id="types.channel" type="checkbox" checked="checked"/>
 			<label for="types.channel">channel</label></br>
 
-			<input id="commands.noteOn" type="checkbox" checked="checked"/>
-			<label for="commands.noteOn">Note On</label>
+			<input id="commands.note-on" type="checkbox" checked="checked"/>
+			<label for="commands.note-on">Note On</label>
 
-			<input id="commands.noteOff" type="checkbox" checked="checked"/>
-			<label for="commands.noteOff">Note Off</label>
+			<input id="commands.note-off" type="checkbox" checked="checked"/>
+			<label for="commands.note-off">Note Off</label>
 		</div>
 	</div>
 
@@ -86,7 +86,6 @@
 			var eventView = new Midi.Views.EventView({
 				el: ".events",
 			});
-
 
 			$(".open").click(function(){
 				$("input[type='file']").click();
@@ -103,7 +102,6 @@
 
 			});
 
-
 			$(".options input[type='checkbox']").click(function(){
 
 				var option = $(this).attr("id").split(".");
@@ -112,9 +110,7 @@
 				eventView.options[option[0]][option[1]] = value;
 				eventView.render();
 			});
-
 	    });
-
 
 	</script>
 
