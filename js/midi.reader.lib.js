@@ -78,59 +78,59 @@ function MidiFile(data) {
 
 			var length = null;
 
-			/* system / meta event */
+			// meta 
 			if (eventTypeByte == 0xff) {
 
 				/* meta event */
 				//event.type = 'meta';
-				var commandByte = stream.readInt8();
+				var eventByte = stream.readInt8();
 				length = stream.readVarInt();
 
-				switch(commandByte) {
+				switch(eventByte) {
 					case 0x00:
-						event.command = 'sequence-number';
+						event.type = 'sequence-number';
 						if (length != 2) throw "Expected length for sequence-number event is 2, got " + length;
 						event.number = stream.readInt16();
 						return event;
 					case 0x01:
-						event.command = 'text';
+						event.type = 'text';
 						event.text = stream.read(length);
 						return event;
 					case 0x02:
-						event.command = 'copyright';
+						event.type = 'copyright';
 						event.text = stream.read(length);
 						return event;
 					case 0x03:
-						event.command = 'track-name';
+						event.type = 'track-name';
 						event.text = stream.read(length);
 						return event;
 					case 0x04:
-						event.command = 'instrument';
+						event.type = 'instrument';
 						event.text = stream.read(length);
 						return event;
 					case 0x05:
-						event.command = 'lyrics';
+						event.type = 'lyrics';
 						event.text = stream.read(length);
 						return event;
 					case 0x06:
-						event.command = 'marker';
+						event.type = 'marker';
 						event.text = stream.read(length);
 						return event;
 					case 0x07:
-						event.command = 'cue-point';
+						event.type = 'cue-point';
 						event.text = stream.read(length);
 						return event;
 					case 0x20:
-						event.command = 'midi-channel-prefix';
+						event.type = 'midi-channel-prefix';
 						if (length != 1) throw "Expected length for midi-channel-prefix event is 1, got " + length;
 						event.channel = stream.readInt8();
 						return event;
 					case 0x2f:
-						event.command = 'end-of-track';
+						event.type = 'end-of-track';
 						if (length !== 0) throw "Expected length for end-of-track event is 0, got " + length;
 						return event;
 					case 0x51:
-						event.command = 'set-tempo';
+						event.type = 'set-tempo';
 						if (length != 3) throw "Expected length for set-tempo event is 3, got " + length;
 						event.microsecondsPerBeat = (
 							(stream.readInt8() << 16) +
@@ -139,7 +139,7 @@ function MidiFile(data) {
 						);
 						return event;
 					case 0x54:
-						event.command = 'smpte-offset';
+						event.type = 'smpte-offset';
 						if (length != 5) throw "Expected length for smpte-offset event is 5, got " + length;
 						var hourByte = stream.readInt8();
 						event.frameRate = { 0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30 }[hourByte & 0x60];
@@ -150,7 +150,7 @@ function MidiFile(data) {
 						event.subframe = stream.readInt8();
 						return event;
 					case 0x58:
-						event.command = 'time-signature';
+						event.type = 'time-signature';
 						if (length != 4) throw "Expected length for time-signature event is 4, got " + length;
 						event.numerator = stream.readInt8();
 						event.denominator = Math.pow(2, stream.readInt8());
@@ -158,18 +158,18 @@ function MidiFile(data) {
 						event.thirtyseconds = stream.readInt8();
 						return event;
 					case 0x59:
-						event.command = 'key-signature';
+						event.type = 'key-signature';
 						if (length != 2) throw "Expected length for key-signature event is 2, got " + length;
 						event.key = stream.readInt8();
 						event.scale = stream.readInt8();
 						return event;
 					case 0x7f:
-						event.command = 'sequencer-specific';
+						event.type = 'sequencer-specific';
 						event.data = stream.read(length);
 						return event;
 					default:
-						// console.log("Unrecognised meta event command: " + commandByte);
-						event.command = 'unknown';
+						// console.log("Unrecognised meta event type: " + eventByte);
+						event.type = 'unknown';
 						event.data = stream.read(length);
 						return event;
 				}
@@ -177,13 +177,17 @@ function MidiFile(data) {
                 //event.data = stream.read(length);
 				//return event;
 
-			} else if (eventTypeByte == 0xf0) {
+			} 
+            // system-exclusive
+            else if (eventTypeByte == 0xf0) {
 				event.type = 'system-exclusive';
 				length = stream.readVarInt();
 				event.data = stream.read(length);
 				return event;
 
-			} else if (eventTypeByte == 0xf7) {
+			} 
+            // devided-system-exclusive
+            else if (eventTypeByte == 0xf7) {
 				event.type = 'divided-system-exclusive';
 				length = stream.readVarInt();
 				event.data = stream.read(length);
@@ -193,7 +197,7 @@ function MidiFile(data) {
 				throw "Unrecognised MIDI event type byte: " + eventTypeByte;
 			}
 
-		/* channel event */
+		/* channel */
 		} else {
 
 			var param1;
@@ -215,7 +219,7 @@ function MidiFile(data) {
 
 			switch (eventType) {
 				case 0x08:
-					event.command = 'note-off';
+					event.type = 'note-off';
 					event.noteNumber = param1;
 					event.velocity = stream.readInt8();
 					return event;
@@ -223,31 +227,31 @@ function MidiFile(data) {
 					event.noteNumber = param1;
 					event.velocity = stream.readInt8();
 					if (event.velocity === 0) {
-						event.command = 'note-off';
+						event.type = 'note-off';
 					} else {
-						event.command = 'note-on';
+						event.type = 'note-on';
 					}
 					return event;
 				case 0x0a:
-					event.command = 'note-aftertouch';
+					event.type = 'note-aftertouch';
 					event.noteNumber = param1;
 					event.amount = stream.readInt8();
 					return event;
 				case 0x0b:
-					event.command = 'controller';
+					event.type = 'controller';
 					event.controllerType = param1;
 					event.value = stream.readInt8();
 					return event;
 				case 0x0c:
-					event.command = 'program-change';
+					event.type = 'program-change';
 					event.programNumber = param1;
 					return event;
 				case 0x0d:
-					event.command = 'channel-aftertouch';
+					event.type = 'channel-aftertouch';
 					event.amount = param1;
 					return event;
 				case 0x0e:
-					event.command = 'pitch-bend';
+					event.type = 'pitch-bend';
 					event.value = param1 + (stream.readInt8() << 7);
 					return event;
 				default:
@@ -255,7 +259,7 @@ function MidiFile(data) {
 					/*
 					console.log("Unrecognised MIDI event type: " + eventType);
 					stream.readInt8();
-					event.command = 'unknown';
+					event.type = 'unknown';
 					return event;
 					*/
 			}

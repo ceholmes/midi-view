@@ -7,7 +7,7 @@ Midi.Views.EventView = Backbone.View.extend({
 
 		this.options = _.extend(this.defaults, options);
 		this.options.types = _.extend(this.defaults.types, options.types);
-		this.options.commands = _.extend(this.defaults.commands, options.commands);
+		this.options.events = _.extend(this.defaults.events, options.events);
 		this.options.columns = _.extend(this.defaults.columns, options.columns);
 	},
 
@@ -35,7 +35,7 @@ Midi.Views.EventView = Backbone.View.extend({
                                 
                 if  (((self.options.types.meta && event.channel === undefined) ||
                     (self.options.types.channel && event.channel !== undefined)) &&
-                    (self.options.commands[event.command] === true) ) {
+                    (self.options.events[event.type] === true) ) {
 				
 					var row = $("<tr></tr>");
 
@@ -43,9 +43,9 @@ Midi.Views.EventView = Backbone.View.extend({
 					$("<td>" + event.deltaTime + "</td>").appendTo(row);
 					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
 					$("<td>" + ((event.type == "channel") ? event.channel : "-") + "</td>").appendTo(row);
-					$("<td>" + (midiTypes[event.command] || event.command) + "</td>").appendTo(row);
+					$("<td>" + (midiTypes[event.type] || event.type) + "</td>").appendTo(row);
 
-					switch(event.command) {
+					switch(event.type) {
 
 						case "text":
 						case "copyright":
@@ -134,7 +134,7 @@ Midi.Views.EventView = Backbone.View.extend({
 			"delta": true,
 			"channel": true,
 			"type": true,
-			"command": true,
+			"event": true,
 			"data": true
 		},
 
@@ -143,7 +143,7 @@ Midi.Views.EventView = Backbone.View.extend({
 			"channel": true
 		},
 
-		commands: {
+		events: {
 			"text": true,
 			"copyright": true,
 			"track-name": true,
@@ -173,8 +173,7 @@ Midi.Views.EventView = Backbone.View.extend({
 		// types
 		"meta":    "meta",
 		"channel": "chan",
-
-		// commands
+		
 		"text":                "text",
 		"copyright":           "copyright",
 		"track-name":          "trk name",

@@ -25,18 +25,17 @@ Midi.Reader = function () {
     this.loadBinary = function (binary) {
 
         var midi = MidiFile(binary);
-
                                 
         var tempo, timeSignature, i;
                                 
         for (i = 0; i < midi.tracks[0].length; i++) {
-            if (midi.tracks[0][i].command === 'set-tempo') {
+            if (midi.tracks[0][i].type === 'set-tempo') {
                 tempo = midi.tracks[0][i]; break;
             }
         }
                                 
         for (i = 0; i < midi.tracks[0].length; i++) {
-            if (midi.tracks[0][i].command === 'time-signature') {
+            if (midi.tracks[0][i].type === 'time-signature') {
                 timeSignature = midi.tracks[0][i]; break;
             }
         }
