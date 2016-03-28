@@ -82,10 +82,11 @@ function MidiFile(data) {
 			if (eventTypeByte == 0xff) {
 
 				/* meta event */
-				//event.type = 'meta';
 				var eventByte = stream.readInt8();
 				length = stream.readVarInt();
 
+                //event.type = Midi.stores.events.find('value', eventByte).name;
+                
 				switch(eventByte) {
 					case 0x00:
 						event.type = 'sequence-number';
@@ -174,9 +175,6 @@ function MidiFile(data) {
 						return event;
 				}
 
-                //event.data = stream.read(length);
-				//return event;
-
 			} 
             // system-exclusive
             else if (eventTypeByte == 0xf0) {
@@ -203,9 +201,8 @@ function MidiFile(data) {
 			var param1;
 
 			if ((eventTypeByte & 0x80) === 0) {
-				/* running status - reuse lastEventTypeByte as the event type.
-					eventTypeByte is actually the first parameter
-				*/
+				// running status - reuse lastEventTypeByte as the event type.
+				// eventTypeByte is actually the first parameter				
 				param1 = eventTypeByte;
 				eventTypeByte = lastEventTypeByte;
 			} else {
@@ -215,26 +212,21 @@ function MidiFile(data) {
 
 			var eventType = eventTypeByte >> 4;
 			event.channel = eventTypeByte & 0x0f;
-			//event.type = 'channel';
 
 			switch (eventType) {
 				case 0x08:
 					event.type = 'note-off';
-					event.noteNumber = param1;
+					event.note = param1;
 					event.velocity = stream.readInt8();
 					return event;
 				case 0x09:
-					event.noteNumber = param1;
+					event.note = param1;
 					event.velocity = stream.readInt8();
-					if (event.velocity === 0) {
-						event.type = 'note-off';
-					} else {
-						event.type = 'note-on';
-					}
+                    event.type = (event.velocity === 0) ? 'note-off' : 'note-on';					
 					return event;
 				case 0x0a:
 					event.type = 'note-aftertouch';
-					event.noteNumber = param1;
+					event.note = param1;
 					event.amount = stream.readInt8();
 					return event;
 				case 0x0b:

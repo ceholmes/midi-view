@@ -31,13 +31,12 @@
 
 		<table class="events">
 			<thead>
-				<th>Trk</th>
-				<th>&#916;</th>
-				<th>Type</th>
-				<th>C</th>
-				<th>Cmd</th>
-				<th>Data</th>
-				<th></th>
+                <th width="30">&#916;</th>
+				<th width="15">T</th>
+				<th width="15">C</th>
+				<th width="60">Type</th>								
+				<th width="30">Data</th>
+				<th width="70"></th>
 			</thead>
 		</table>
 	</div>
@@ -62,48 +61,42 @@
 
     $(function () {
 
-		var events = Midi.Enums.Events;
-
-		var notes = {c4:60 };
+		//var events = Midi.Enums.Events;
+		//var notes = {c4:60 };
 
         var infoView = new Midi.Views.InfoView({ el: ".info" })
         var eventView = new Midi.Views.EventView({ el: ".events" });
 
-
-        // file
 		var midiIn = {
 			header: {formatType:1, ticksPerBeat:240},
 			tracks: []
 		};
 
-
-		// track
 		var track = [
+            
+			{ type: 'text',       text: "Powered by Midio" },
+			{ type: 'copyright',  text: "JSFanatic" },
+			{ type: 'track-name', text: "Love Wrangler" },
+			{ type: 'instrument', text: "Keyboard" },
+            
+			{ type: 'lyrics',     text: "Ohh baby yeah..." },
+			{ type: 'marker',     text: "Intro" },
+			{ type: 'cue-point',  text: "Dancers" },
 
-			{command:events.text, text:"Text"},
-			{command:events.copyright, text:"Copyright"},
-			{command:events.trackName, text:"Track Name"},
-			{command:events.instrument, text:"Instrument"},
-			{command:events.lyrics, text:"Lyrics"},
-			{command:events.marker, text:"Marker"},
-			{command:events.cuePoint, text:"Cue Point"},
+			{ type: 'tempo', mcsPerBeat: 400000 },
+			{ type: 'time-signature', numerator: 6, denominator: 8, metronome: 24, thirtyseconds: 8 },
 
-			{command:events.tempo, mcsPerBeat:400000},
+			{ type: 'note-on',  time: 0,   channel: 0, note: 60, velocity: 90 },
+			{ type: 'note-off', time: 128, channel: 0, note: 60, velocity: 90 },
 
-			{command:events.timeSig, numerator:6, denominator:8, metronome:24, thirtyseconds:8},
+			//{ type: 'note-on', time:0, channel:0, note: 'C4', velocity:90},
+			//{ type: 'note-off', time:128, channel:0, note: 'V4', velocity:90},
 
-			{command:events.noteOn, time:0, channel:0, note:notes.c4, velocity:90},
-			{command:events.noteOff, time:128, channel:0, note:notes.c4, velocity:90},
-
-			{command:events.noteOn, time:0, channel:0, note:62, velocity:90},
-			{command:events.noteOff, time:128, channel:0, note:62, velocity:90},
-
-			{command:events.controller, time:0, channel:0, controller:7, value:128},
-			{command:events.aftertouch, time:0, channel:0, note:62, value:64},
-			{command:events.program, time:0, channel:0, value:36},
-			{command:events.channelAftertouch, time:0, channel:0, value:127},
-			{command:events.channelPrefix, time:0, channel:10},
-
+			{ type: 'controller', time: 0, channel: 0, controller: 7, value: 128 },
+			{ type: 'note-aftertouch', time: 0, channel: 0, note: 62, value: 64 },
+			{ type: 'program', time: 0, channel: 0, value: 36},
+			{ type: 'channel-aftertouch', time: 0, channel: 0, value: 127},
+			{ type: 'channel-prefix', time: 0, channel: 10},
 		];
 
 		//console.log(track);

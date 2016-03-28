@@ -39,12 +39,11 @@ Midi.Views.EventView = Backbone.View.extend({
 				
 					var row = $("<tr></tr>");
 
+                    $("<td>" + event.deltaTime + "</td>").appendTo(row);
 					$("<td>" + index + "</td>").appendTo(row);
-					$("<td>" + event.deltaTime + "</td>").appendTo(row);
+					$("<td>" + ((event.channel !== undefined) ? event.channel : "-") + "</td>").appendTo(row);
 					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
-					$("<td>" + ((event.type == "channel") ? event.channel : "-") + "</td>").appendTo(row);
-					$("<td>" + (midiTypes[event.type] || event.type) + "</td>").appendTo(row);
-
+					
 					switch(event.type) {
 
 						case "text":
@@ -60,21 +59,21 @@ Midi.Views.EventView = Backbone.View.extend({
 						case "note-on":
 						case "note-off":
 							if (self.options.noteNames) {
-								var name = (event.channel == 9) ? percussion[event.noteNumber].toLowerCase() : notes[event.noteNumber];
-								$("<td>" + name + "</td><td>vel: " + event.velocity + "</td>").appendTo(row);
+								var name = (event.channel == 9) ? percussion[event.note].toLowerCase() : notes[event.note];
+								$("<td>" + name + "</td><td>velocity: " + event.velocity + "</td>").appendTo(row);
 							}
 							else {
-								$("<td>note: " + event.noteNumber + "</td><td>vel: " + event.velocity + "</td>").appendTo(row);
+								$("<td>note: " + event.note + "</td><td>vel: " + event.velocity + "</td>").appendTo(row);
 							}
 							break;
 
-						case "note-after-touch":
-							$("<td>" + notes[event.noteNumber] + "</td>" + "<td>val: " + event.amount + "</td>").appendTo(row);
+						case "note-aftertouch":
+							$("<td>" + notes[event.note] + "</td>" + "<td>val: " + event.amount + "</td>").appendTo(row);
 							break;
 
 						case "controller":
 							$("<td title='" + controllers[event.controllerType] + "'>num: " + event.controllerType + "</td>" +
-								"<td>val: " + event.value + "</td>").appendTo(row);
+								"<td>value: " + event.value + "</td>").appendTo(row);
 							break;
 
 						case "program-change":
@@ -176,24 +175,24 @@ Midi.Views.EventView = Backbone.View.extend({
 		
 		"text":                "text",
 		"copyright":           "copyright",
-		"track-name":          "trk name",
-		"instrument":          "Inst",
+		"track-name":          "track name",
+		"instrument":          "instrument",
 		"lyrics":              "lyrics",
 		"marker":              "marker",
 		"cue-point":           "cue",
 		"note-on":             "note on",
 		"note-off":            "note off",
-		"note-aftertouch":     "after touch",
+		"note-aftertouch":     "note-aftertouch",
 		"controller":          "controller",
 		"program-change":      "program",
-		"channel-aftertouch":  "ch aftertouch",
+		"channel-aftertouch":  "chan-aftertouch",
 		"pitch-bend":          "pitch bend",
 		"midi-channel-prefix": "ch prefix",
-		"end-of-track":        "trk end",
+		"end-of-track":        "track end",
 		"set-tempo":           "tempo",
 		"smpte-offset":        "smtp",
-		"time-signature":      "time sig",
-		"key-signature":       "key sig",
+		"time-signature":      "time signature",
+		"key-signature":       "key signature",
 		"sequence":            "sequence"
 	}
     
