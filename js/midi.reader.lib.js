@@ -88,48 +88,52 @@ function MidiFile(data) {
                 //event.type = Midi.stores.events.find('value', eventByte).name;
                 
 				switch(eventByte) {
-					case 0x00:
+					case 0x00:  // sequence-number
 						event.type = 'sequence-number';
 						if (length != 2) throw "Expected length for sequence-number event is 2, got " + length;
 						event.number = stream.readInt16();
 						return event;
-					case 0x01:
+                        
+					case 0x01:  // text
 						event.type = 'text';
 						event.text = stream.read(length);
 						return event;
-					case 0x02:
+					case 0x02:  // copyright
 						event.type = 'copyright';
 						event.text = stream.read(length);
 						return event;
-					case 0x03:
+					case 0x03:  // track name
 						event.type = 'track-name';
 						event.text = stream.read(length);
 						return event;
-					case 0x04:
+					case 0x04:  // instrument
 						event.type = 'instrument';
 						event.text = stream.read(length);
 						return event;
-					case 0x05:
+					case 0x05:  // lyrics
 						event.type = 'lyrics';
 						event.text = stream.read(length);
 						return event;
-					case 0x06:
+					case 0x06:  // marker
 						event.type = 'marker';
 						event.text = stream.read(length);
 						return event;
-					case 0x07:
+					case 0x07:  // cue point
 						event.type = 'cue-point';
 						event.text = stream.read(length);
 						return event;
-					case 0x20:
+                                                
+					case 0x20:  // midi channel prefix
 						event.type = 'midi-channel-prefix';
 						if (length != 1) throw "Expected length for midi-channel-prefix event is 1, got " + length;
 						event.channel = stream.readInt8();
 						return event;
-					case 0x2f:
+                        
+					case 0x2f:  // end of track
 						event.type = 'end-of-track';
 						if (length !== 0) throw "Expected length for end-of-track event is 0, got " + length;
 						return event;
+                        
 					case 0x51:
 						event.type = 'set-tempo';
 						if (length != 3) throw "Expected length for set-tempo event is 3, got " + length;
@@ -168,6 +172,7 @@ function MidiFile(data) {
 						event.type = 'sequencer-specific';
 						event.data = stream.read(length);
 						return event;
+                        
 					default:
 						// console.log("Unrecognised meta event type: " + eventByte);
 						event.type = 'unknown';

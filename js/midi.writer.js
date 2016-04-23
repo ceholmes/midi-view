@@ -199,7 +199,7 @@ Midi.Writer = function () {
 
 		var buffer = value & 0x7F;
 
-		while (value = value >> 7) {
+		while ((value = value >> 7)) {
 			buffer <<= 8;
 			buffer |= ((value & 0x7F) | 0x80);
 		}

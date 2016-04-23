@@ -6,75 +6,44 @@
 
 	<link rel="stylesheet" href="css/blueprint/reset.css" />
 	<link rel="stylesheet" href="css/blueprint/typography.css" />
+	<link rel="stylesheet" href="css/midiview.css" />
 
     <script src="lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="lib/underscore-min.js" type="text/javascript"></script>
     <script src="lib/backbone-min.js" type="text/javascript"></script>
-	<script src="lib/namespace.js" type="text/javascript"></script>
 
-    <script src="js/stream.js" type="text/javascript"></script>
-    <script src="js/midifile.js" type="text/javascript"></script>
-
-    <script src="js/midi.debug.js" type="text/javascript"></script>
-
-	<script src="js/midi.file.js" type="text/javascript"></script>
+	<script src="js/midi.reader.js" type="text/javascript"></script>
+	<script src="js/midi.reader.lib.js" type="text/javascript"></script>
 	<script src="js/midi.writer.js" type="text/javascript"></script>
+	<script src="js/midi.util.stream.js" type="text/javascript"></script>
+
+	<script src="js/midi.enums.notes.js" type="text/javascript"></script>
+	<script src="js/midi.enums.percussion.js" type="text/javascript"></script>
+	<script src="js/midi.enums.instruments.js" type="text/javascript"></script>
+	<script src="js/midi.enums.controllers.js" type="text/javascript"></script>
+	<script src="js/midi.enums.events.js" type="text/javascript"></script>
+
 	<script src="js/midi.views.event.js" type="text/javascript"></script>
 	<script src="js/midi.views.info.js" type="text/javascript"></script>
-	<script src="js/midi.names.notes.js" type="text/javascript"></script>
-	<script src="js/midi.names.percussion.js" type="text/javascript"></script>
-	<script src="js/midi.names.instruments.js" type="text/javascript"></script>
-	<script src="js/midi.names.controllers.js" type="text/javascript"></script>
 
-	<style>
-		html, body {width:100%; height:100%;}
-		body{font-family:arial; padding-left:50px; padding-top:20px}
-
-		.events table{margin-top:10px;}
-		.events tbody tr:nth-child(odd) {background-color:#efefef;}
-		.events th, .events td {text-align:left; padding:4px; cursor:default}
-		.events th {font-weight:bold;}
-
-		input[type='file']{display:none;}
-
-		.column {display:inline-block; height:100%; vertical-align:top; margin-right:30px;}
-
-		.buttons {display:block; margin-bottom:5px;}
-		.buttons .open img {margin-right:3px;}
-
-		.events{display:inline-block; float:left; min-width:290px;}
-
-		.info{display:block; margin-top:20px; line-height:200%;}
-		.info label{font-weight:bold; margin-right:3px;}
-		.info span {display:inline-block; margin-right:10px;}
-
-
-		.options {margin-top:30px; line-height:200%;}
-		.options input[type='checkbox'] {cursor:pointer;}
-		.options label {display:inline-block; width:50px; cursor:pointer;}
-
-	</style>
 </head>
 
 <body>
-
 	<div class="column">
 
 		<table class="events">
 			<thead>
-				<th>Trk</th>
-				<th>&#916;</th>
-				<th>Type</th>
-				<th>C</th>
-				<th>Cmd</th>
-				<th>Data</th>
-				<th></th>
+                <th width="30">&#916;</th>
+				<th width="15">T</th>
+				<th width="15">C</th>
+				<th width="60">Type</th>								
+				<th width="30">Data</th>
+				<th width="70"></th>
 			</thead>
 		</table>
 	</div>
 
 	<div class="column">
-
 		<div class="info">
 			<label>File Name:</label><span class="fileName"></span><br/>
 			<label>Format:</label><span class="formatType"></span>
@@ -87,8 +56,6 @@
 			<label>McsPerTick:</label><span class="mcsPerTick"></span>
 			<label>MlsPerTick:</label><span class="mlsPerTick"></span>
 		</div>
-
-
 	</div>
 
 	<script type="text/javascript">
@@ -105,7 +72,7 @@
 			var binaryIn = window.atob(b64);
 
 
-	        var midi = Midi.File.loadBinary(binaryIn);
+	        var midi = Midi.Reader.loadBinary(binaryIn);
 
 			var binaryOut = Midi.Writer.write(midi);
 
