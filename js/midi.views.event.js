@@ -45,7 +45,6 @@ Midi.Views.EventView = Backbone.View.extend({
 					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
 					
 					switch(event.type) {
-
 						case "text":
 						case "copyright":
 						case "track-name":
@@ -55,7 +54,7 @@ Midi.Views.EventView = Backbone.View.extend({
 						case "cue-point":
 							$("<td colspan='2'>" + event.text + "</td>").appendTo(row);
 							break;
-
+							
 						case "note-on":
 						case "note-off":
 							if (self.options.noteNames) {
