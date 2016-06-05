@@ -39,7 +39,7 @@ Midi.Views.EventView = Backbone.View.extend({
 				
 					var row = $("<tr></tr>");
 
-                    $("<td>" + event.deltaTime + "</td>").appendTo(row);
+                    $("<td>" + (event.delta || 0) + "</td>").appendTo(row);
 					$("<td>" + index + "</td>").appendTo(row);
 					$("<td>" + ((event.channel !== undefined) ? event.channel : "-") + "</td>").appendTo(row);
 					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
@@ -84,13 +84,14 @@ Midi.Views.EventView = Backbone.View.extend({
 							break;
 
 						case "pitch-bend":
+							$("<td colspan='2'>" + event.value + "</td>").appendTo(row);
 							break;
 
-						case "midi-channel-prefix":
-							$("<td colspan='2'>" + event.channel + "</td>").appendTo(row);
+						case "channel-prefix":
+							$("<td colspan='2'>" + event.channelNumber + "</td>").appendTo(row);
 							break;
 
-						case "end-of-track" :
+						case "end-track" :
 							$("<td colspan='2'>-</td>").appendTo(row);
 							break;
 
@@ -156,8 +157,8 @@ Midi.Views.EventView = Backbone.View.extend({
 			"program-change": true,
 			"channel-aftertouch": true,
 			"pitch-bend": true,
-			"midi-channel-prefix": true,
-			"end-of-track": true,
+			"channel-prefix": true,
+			"end-track": true,
 			"set-tempo": true,
 			"smpte-offset": true,
 			"time-signature": true,
@@ -186,8 +187,8 @@ Midi.Views.EventView = Backbone.View.extend({
 		"program-change":      "program",
 		"channel-aftertouch":  "chan-aftertouch",
 		"pitch-bend":          "pitch bend",
-		"midi-channel-prefix": "ch prefix",
-		"end-of-track":        "track end",
+		"channel-prefix": 	   "ch prefix",
+		"end-track":           "track end",
 		"set-tempo":           "tempo",
 		"smpte-offset":        "smtp",
 		"time-signature":      "time signature",

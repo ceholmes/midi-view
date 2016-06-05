@@ -11,20 +11,21 @@ Midi.Reader = function () {
 
         reader.onload = function (event) {
 
-            var midi = self.loadBinary(event.target.result);
+            var midi = self.loadBuffer(event.target.result);
             midi.info.fileName = file.name.toLowerCase();
             console.log(midi);
 
             callback(midi);
         };
 
-        reader.readAsBinaryString(file);
+        reader.readAsArrayBuffer(file);
     };
 
     // loadBinary
-    this.loadBinary = function (binary) {
+    this.loadBuffer = function (buffer) {
 
-        var midi = MidiFile(binary);
+        var reader = new Midio.Reader();
+        var midi = reader.read(buffer);                
                                 
         var tempo, timeSignature, i;
                                 
@@ -46,16 +47,16 @@ Midi.Reader = function () {
         var mcsPerBeat = tempo.microsecondsPerBeat;
         var beatsPerMeasure = timeSignature.numerator;
         var beatsPerMin = Math.floor(60000000 / mcsPerBeat);
-        var ticksPerBeat = midi.header.ticksPerBeat;
+        var ticksPerBeat = midi.header.timeDivision;
         var ticksPerMin = ticksPerBeat * beatsPerMin;
         var mcsPerTick = Math.floor(60000000 / ticksPerMin);
         var mlsPerTick = Math.floor(mcsPerTick / 1000);
 
                 
         midi.info = {};
-        midi.info.formatType = midi.header.formatType;
+        midi.info.formatType = midi.header.type;
         midi.info.trackCount = midi.header.trackCount;
-        midi.info.ticksPerBeat = midi.header.ticksPerBeat;                        		        
+        midi.info.ticksPerBeat = midi.header.timeDivision;                        		        
         midi.info.mcsPerBeat = mcsPerBeat;
         midi.info.beatsPerMeasure = beatsPerMeasure;
         midi.info.beatsPerMin = beatsPerMin;
@@ -70,7 +71,7 @@ Midi.Reader = function () {
             var total = 0;
             
             track.forEach(function(event){
-                total = total + event.deltaTime;
+                total = total + event.delta;
                 event.time = {};
                 event.time.ticks = total;
                 event.time.mcs = total * mcsPerTick;
