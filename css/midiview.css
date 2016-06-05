@@ -2,10 +2,12 @@ html, body {width:100%; height:100%;}
 
 body{font-family:arial; padding-left:50px; padding-top:20px}
 
-.events table{margin-top:10px;}
+table.events {margin-top:20px;}
 .events tbody tr:nth-child(odd) {background-color:#efefef;}
 .events th, .events td {text-align:left; padding:4px; cursor:default}
 .events th {font-weight:bold;}
+
+table.events tr {style: inline-block; width: 100%;}
 
 input[type='file']{display:none;}
 
@@ -24,3 +26,16 @@ input[type='file']{display:none;}
 .options {margin-top:30px; line-height:200%;}
 .options input[type='checkbox'] {cursor:pointer;}
 .options label {display:inline-block; width:50px; cursor:pointer;}
+
+.events td span {display: inline-block; margin: 0 5px 0 0;}
+
+.events .delta {text-align:left;}
+
+.note-on td span:first-child,       
+.note-off td span:first-child
+    {min-width: 50px;}
+
+
+.note-on td span:nth-child(2),
+.note-off td span:nth-child(2)
+    {min-width: 50px;}

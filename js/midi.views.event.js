@@ -36,13 +36,19 @@ Midi.Views.EventView = Backbone.View.extend({
                 if  (((self.options.types.meta && event.channel === undefined) ||
                     (self.options.types.channel && event.channel !== undefined)) &&
                     (self.options.events[event.type] === true) ) {
-				
+									
+					var isChannel = (event.channel !== undefined);
+																		
 					var row = $("<tr></tr>");
+					
+					row.addClass((isChannel) ? 'channel' : 'meta');
+					row.addClass(event.type);
 
-                    $("<td>" + (event.delta || 0) + "</td>").appendTo(row);
-					$("<td>" + index + "</td>").appendTo(row);
-					$("<td>" + ((event.channel !== undefined) ? event.channel : "-") + "</td>").appendTo(row);
-					$("<td>" + midiTypes[event.type] + "</td>").appendTo(row);
+                    row.append("<td class='delta'>" + (event.delta || 0) + "</td>");
+					row.append("<td>" + index + "</td>");
+					row.append("<td>" + (isChannel ? event.channel : "-") + "</td>");
+															
+					var eventHtml = "<span>" + midiTypes[event.type] + "</span>";
 					
 					switch(event.type) {
 						case "text":
@@ -52,70 +58,68 @@ Midi.Views.EventView = Backbone.View.extend({
 						case "lyrics":
 						case "marker":
 						case "cue-point":
-							$("<td colspan='2'>" + event.text + "</td>").appendTo(row);
+							eventHtml += ("<span>" + event.text + "<span>");
 							break;
-							
+														
 						case "note-on":
 						case "note-off":
 							if (self.options.noteNames) {
 								var name = (event.channel == 9) ? percussion[event.note].toLowerCase() : notes[event.note];
-								$("<td>" + name + "</td><td>velocity: " + event.velocity + "</td>").appendTo(row);
+								eventHtml += "<span>note: " + name + "</span>";								
 							}
 							else {
-								$("<td>note: " + event.note + "</td><td>vel: " + event.velocity + "</td>").appendTo(row);
+								eventHtml += "<span>note: " + event.note + "</span>";
 							}
+							eventHtml += "<span>velocity: " + event.velocity + "</span>";
 							break;
-
+							
 						case "note-aftertouch":
-							$("<td>" + notes[event.note] + "</td>" + "<td>val: " + event.amount + "</td>").appendTo(row);
+							eventHtml += "<span>note: " + notes[event.note] + "</span>";
+							eventHtml += "<span>value: " + event.amount + "</span>";
 							break;
 
 						case "controller":
-							$("<td title='" + controllers[event.controllerType] + "'>num: " + event.controllerType + "</td>" +
-								"<td>value: " + event.value + "</td>").appendTo(row);
+							eventHtml += "<span title='" + controllers[event.controllerType] + "'>control: " + event.controllerType + "</span>";
+							eventHtml += "<span>value: " + event.value + "</span>";
 							break;
 
 						case "program-change":
-							$("<td colspan='2'>" + instruments[event.programNumber] + "</td>").appendTo(row);
+							eventHtml += "<span>" + instruments[event.programNumber] + "</span>";
 							break;
 
 						case "channel-aftertouch":
-							$("<td colspan='2'>" + event.amount + "</td>").appendTo(row);
+							eventHtml += "<span>value: " + event.amount + "</span>";
 							break;
 
 						case "pitch-bend":
-							$("<td colspan='2'>" + event.value + "</td>").appendTo(row);
+							eventHtml += "<span>value: " + event.value + "</span>";
 							break;
 
 						case "channel-prefix":
-							$("<td colspan='2'>" + event.channelNumber + "</td>").appendTo(row);
-							break;
-
-						case "end-track" :
-							$("<td colspan='2'>-</td>").appendTo(row);
+							eventHtml += "<span>channel: " + event.channelNumber + "</span>";
 							break;
 
 						case "set-tempo":
-							$("<td colspan='2'>" + event.microsecondsPerBeat + " mpb</td>").appendTo(row);
+							eventHtml += "<span>" + event.microsecondsPerBeat + " mpb</span>";
 							break;
 
 						case "smpte-offset":
-							$("<td colspan='2'>" + event.frameRate + " fps</td>").appendTo(row);
+							eventHtml += "<span>frame rate:" + event.frameRate + " fps</span>";
 							break;
 
 						case "time-signature":
-							$("<td colspan='2'>" + event.numerator + "/" + event.denominator  + "</td>").appendTo(row);
+							eventHtml += "<span>" + event.numerator + "/" + event.denominator  + "</span>";
 							break;
 
 						case "key-signature":
-							$("<td colspan='2'>" + "scale: " + event.scale + "&nbsp;&nbsp;" + "key: " +
-								event.key + " " + "</td>").appendTo(row);
+							eventHtml += "<span>" + "scale: " + event.scale + "&nbsp;&nbsp;" + "key: " + event.key + " " + "</span>";
 							break;
 
 						case "sequence":
 							break;
 					}
 
+					row.append("<td>" + eventHtml + "</td>");
 					$(tbody).append(row);
 				}
 
@@ -173,27 +177,27 @@ Midi.Views.EventView = Backbone.View.extend({
 		"meta":    "meta",
 		"channel": "chan",
 		
-		"text":                "text",
-		"copyright":           "copyright",
-		"track-name":          "track name",
-		"instrument":          "instrument",
+		"text":                "Text",
+		"copyright":           "Copyright",
+		"track-name":          "Track Name",
+		"instrument":          "Instrument.",
 		"lyrics":              "lyrics",
-		"marker":              "marker",
-		"cue-point":           "cue",
-		"note-on":             "note on",
-		"note-off":            "note off",
-		"note-aftertouch":     "note-aftertouch",
-		"controller":          "controller",
-		"program-change":      "program",
-		"channel-aftertouch":  "chan-aftertouch",
-		"pitch-bend":          "pitch bend",
-		"channel-prefix": 	   "ch prefix",
-		"end-track":           "track end",
-		"set-tempo":           "tempo",
-		"smpte-offset":        "smtp",
-		"time-signature":      "time signature",
-		"key-signature":       "key signature",
-		"sequence":            "sequence"
+		"marker":              "Marker",
+		"cue-point":           "Cue",
+		"note-on":             "Note On",
+		"note-off":            "Note Off",
+		"note-aftertouch":     "Key Pressure",
+		"controller":          "Controller",
+		"program-change":      "Program",
+		"channel-aftertouch":  "Channel Pressure",
+		"pitch-bend":          "Pitch Bend",
+		"channel-prefix": 	   "Channel Prefix",
+		"end-track":           "End of Track",
+		"set-tempo":           "Tempo",
+		"smpte-offset":        "SMTP",
+		"time-signature":      "Time Signature",
+		"key-signature":       "Key Signature",
+		"sequence":            "Sequence"
 	}
     
 });
