@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="css/blueprint/typography.css" />
     <link rel="stylesheet" href="css/midiview.css" />
 
-    <script src="lib/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="lib/underscore-min.js" type="text/javascript"></script>
-    <script src="lib/backbone-min.js" type="text/javascript"></script>
-    <script src="lib/midio.js" type="text/javascript"></script>
+    <script src="JS/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="JS/lib/midio.js" type="text/javascript"></script>
 
     <script src="js/app.js" type="text/javascript"></script>	
     <script src="js/views/event.js" type="text/javascript"></script>
@@ -35,7 +33,7 @@
                 <th width="30">&#916;</th>
                 <th width="15">T</th>
                 <th width="15">C</th>
-                <th width="60">Event</th>								
+                <th width="60">Event</th>
             </thead>
         </table>
     </div>
@@ -48,7 +46,7 @@
             <label>Tracks:</label><span class="trackCount"></span>
             <label>Time:</label><span class="timeSig"></span><br/>
             <label>BeatsPerMin:</label><span class="beatsPerMin"></span>
-            <label>TicksPerBeat:</label><span class="ticksPerBeat"></span></br>						
+            <label>TicksPerBeat:</label><span class="ticksPerBeat"></span></br>
             <label>McsPerBeat:</label><span class="mcsPerBeat"></span>
             <label>TicksPerMin:</label><span class="ticksPerMin"></span></br>
             <label>McsPerTick:</label><span class="mcsPerTick"></span>
@@ -71,32 +69,9 @@
     </div>
 
     <script type="text/javascript">
-
-        $(function () {
-
-            var infoView = new MidiView.views.Info(".info");
-            var eventView = new Midi.Views.EventView({el: ".events"});
-
-            $(".open").click(function(){
-                $("input[type='file']").click();
-            });
-
-            $("#file-picker").change(function(evt){
-                var file = evt.target.files[0];
-                Midi.Reader.loadFile(file, function(midi){
-                    infoView.render(midi);
-                    eventView.render(midi);
-                })
-            });
-
-            $(".options input[type='checkbox']").click(function(){
-                var option = $(this).attr("id").split(".");
-                var value = $(this).is(":checked");
-                eventView.options[option[0]][option[1]] = value;
-                eventView.render();
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            window.midiView = new MidiView.App();
         });
-
     </script>
 
 </body>

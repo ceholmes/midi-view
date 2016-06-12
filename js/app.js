@@ -1,28 +1,43 @@
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('doc ready');
-});
-
-
-var Midi = Midi || {};
-Midi.Reader = function () {
+var MidiView = MidiView || {};
+MidiView.App = function () {
     
     var _fileReader = new FileReader();
     var _midiReader = new Midio.Reader();
+    var _infoView = new MidiView.views.Info(".info");
+    var _eventView = new MidiView.views.Event(".events");
+    var _midi = null;
+
+    $(".open").click(function(){
+        $("input[type='file']").click();
+    });
+
+    $("#file-picker").change(function(evt){
+        var file = evt.target.files[0];
+        loadFile(file, function(midi){
+            _infoView.render(midi);
+            _eventView.render(midi);
+        });
+    });
+
+    $(".options input[type='checkbox']").click(function(){
+        var option = $(this).attr("id").split(".");
+        var value = $(this).is(":checked");
+        _eventView.options[option[0]][option[1]] = value;
+        _eventView.render(_midi);
+    });
+        
 
     return {
         loadFile : loadFile
     };
 
-
     function loadFile(file, callback) {
 
         _fileReader.onload = function (event) {
-            var midi = _midiReader.read(event.target.result);
-
-            midi = buildModel(midi);
-            midi.info.fileName = file.name.toLowerCase();
-            callback(midi);
+            _midi = _midiReader.read(event.target.result);
+            _midi = buildModel(_midi);
+            _midi.info.fileName = file.name.toLowerCase();
+            callback(_midi);
         };
 
         _fileReader.readAsArrayBuffer(file);
@@ -105,4 +120,4 @@ Midi.Reader = function () {
         return bars + "." + beats + "." + ticks;
     }
 
-} ();
+};
