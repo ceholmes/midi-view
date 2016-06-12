@@ -34,6 +34,7 @@ local.properties
 #################
 
 # Visual Studio Code
+.vscode
 .zedstate
 
 ## Ignore Visual Studio temporary files, build results, and

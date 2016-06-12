@@ -1,38 +1,43 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('doc ready');
+});
+
+
 var Midi = Midi || {};
-
 Midi.Reader = function () {
+    
+    var _fileReader = new FileReader();
+    var _midiReader = new Midio.Reader();
 
-    var self = this;
+    return {
+        loadFile : loadFile
+    };
 
-    // load file
-    this.loadFile = function (file, callback) {
 
-        var reader = new FileReader();
+    function loadFile(file, callback) {
 
-        reader.onload = function (event) {
-            var midi = self.loadBuffer(event.target.result);
+        _fileReader.onload = function (event) {
+            var midi = _midiReader.read(event.target.result);
+
+            midi = buildModel(midi);
             midi.info.fileName = file.name.toLowerCase();
             callback(midi);
         };
 
-        reader.readAsArrayBuffer(file);
-    };
+        _fileReader.readAsArrayBuffer(file);
+    }
 
-    // load arraybuffer
-    this.loadBuffer = function (buffer) {
+    function buildModel(midi) {
 
-        // read midi
-        var reader = new Midio.Reader();
-        var midi = reader.read(buffer);                
-                                              
         // get tempo
         var tempo = midi.tracks[0].filter(function(m){return m.type === 'set-tempo';})[0] || null;
         tempo = tempo || { microsecondsPerBeat: (60000000 / 120) };
-                                                                 
+
         // get time signature
         var timeSignature = midi.tracks[0].filter(function(m){return m.type === 'time-signature';})[0] || null;
         timeSignature = timeSignature || { numerator: 4, denominator: 4 };
-        
+
         // calc info
         var mcsPerBeat = tempo.microsecondsPerBeat;
         var beatsPerMeasure = timeSignature.numerator;
@@ -41,22 +46,22 @@ Midi.Reader = function () {
         var ticksPerMin = ticksPerBeat * beatsPerMin;
         var mcsPerTick = Math.floor(60000000 / ticksPerMin);
         var mlsPerTick = Math.floor(mcsPerTick / 1000);
-                
-        midi.info = {            
+
+        midi.info = {
             formatType : midi.header.type,
             trackCount : midi.header.trackCount,
-            ticksPerBeat : midi.header.timeDivision,                        		        
+            ticksPerBeat : midi.header.timeDivision,
             mcsPerBeat : mcsPerBeat,
             beatsPerMeasure : beatsPerMeasure,
             beatsPerMin : beatsPerMin,
             ticksPerMin : ticksPerMin,
             mcsPerTick : mcsPerTick,
             mlsPerTick : mlsPerTick,
-            timeSignature : timeSignature                        
+            timeSignature : timeSignature
         };
-                
-        midi.tracks.forEach(function(track, index){                        
-            var total = 0;            
+
+        midi.tracks.forEach(function(track, index){
+            var total = 0;
             track.forEach(function(event){
                 total = total + event.delta;
                 event.time = {};
@@ -68,7 +73,7 @@ Midi.Reader = function () {
         });
 
         return midi;
-    };
+    }
 
     function toHMS(microseconds) {
 
@@ -100,5 +105,4 @@ Midi.Reader = function () {
         return bars + "." + beats + "." + ticks;
     }
 
-    return this;
 } ();

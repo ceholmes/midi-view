@@ -1,25 +1,29 @@
-var Midi = Midi || {};
-Midi.Views = Midi.Views || {};
+var MidiView = MidiView || {};
+MidiView.views = MidiView.views || {};
 
-Midi.Views.InfoView = Backbone.View.extend({
+MidiView.views.Info = function(el) {
 
-	render: function(midi) {
+    var _el = $(el);
+    
+    return {
+        render : render	
+    };
 
-		this.$(".fileName").html(midi.info.fileName);
+    function render(midi) {
 
-		this.$(".formatType").html(midi.info.formatType);
-		this.$(".trackCount").html(midi.info.trackCount);
-		this.$(".timeSig").html(midi.info.timeSignature.numerator + "/" +
-			midi.info.timeSignature.denominator);
+        _el.find(".fileName").html(midi.info.fileName);
+        _el.find(".formatType").html(midi.info.formatType);
+        _el.find(".trackCount").html(midi.info.trackCount);
+        _el.find(".timeSig").html(midi.info.timeSignature.numerator + 
+            "/" + midi.info.timeSignature.denominator);
 
-		this.$(".beatsPerMin").html(midi.info.beatsPerMin);
-		this.$(".ticksPerBeat").html(midi.info.ticksPerBeat);
+        _el.find(".beatsPerMin").html(midi.info.beatsPerMin);
+        _el.find(".ticksPerBeat").html(midi.info.ticksPerBeat);
+        _el.find(".mcsPerBeat").html(midi.info.mcsPerBeat);
+        _el.find(".ticksPerMin").html(midi.info.ticksPerMin);
+        _el.find(".mcsPerTick").html(midi.info.mcsPerTick);
+        _el.find(".mlsPerTick").html(midi.info.mlsPerTick);
 
-		this.$(".mcsPerBeat").html(midi.info.mcsPerBeat);
-		this.$(".ticksPerMin").html(midi.info.ticksPerMin);
-		this.$(".mcsPerTick").html(midi.info.mcsPerTick);
-		this.$(".mlsPerTick").html(midi.info.mlsPerTick);
-
-		$(this.el).css("visibility", "visible");
-	}
-});
+        _el.css("visibility", "visible");
+    }
+};

@@ -3,106 +3,101 @@
 <head>
     <title>MidiView</title>
 
-	<link rel="stylesheet" href="css/blueprint/reset.css" />
-	<link rel="stylesheet" href="css/blueprint/typography.css" />
-	<link rel="stylesheet" href="css/midiview.css" />
+    <link rel="stylesheet" href="css/blueprint/reset.css" />
+    <link rel="stylesheet" href="css/blueprint/typography.css" />
+    <link rel="stylesheet" href="css/midiview.css" />
 
     <script src="lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="lib/underscore-min.js" type="text/javascript"></script>
     <script src="lib/backbone-min.js" type="text/javascript"></script>
-	<script src="lib/midio.js" type="text/javascript"></script>
+    <script src="lib/midio.js" type="text/javascript"></script>
 
-    <script src="js/app.js" type="text/javascript"></script>
-	
-	<script src="js/views/event.js" type="text/javascript"></script>
-	<script src="js/views/info.js" type="text/javascript"></script>
-	
-	<script src="js/enums/notes.js" type="text/javascript"></script>
-	<script src="js/enums/percussion.js" type="text/javascript"></script>
-	<script src="js/enums/instruments.js" type="text/javascript"></script>
-	<script src="js/enums/controllers.js" type="text/javascript"></script>	
+    <script src="js/app.js" type="text/javascript"></script>	
+    <script src="js/views/event.js" type="text/javascript"></script>
+    <script src="js/views/info.js" type="text/javascript"></script>
+    
+    <script src="js/enums/notes.js" type="text/javascript"></script>
+    <script src="js/enums/percussion.js" type="text/javascript"></script>
+    <script src="js/enums/instruments.js" type="text/javascript"></script>
+    <script src="js/enums/controllers.js" type="text/javascript"></script>	
 </head>
 
 <body>
-	<input type="file" id="files" />
+    <input type="file" id="file-picker" />
 
-	<div class="buttons">
-		<button class="open"><img src="images/folder.gif"/>Open</button>
-	</div>
+    <div class="buttons">
+        <button class="open"><img src="images/folder.gif"/>Open</button>
+    </div>
 
-	<div class="column">
-		<table class="events">
-			<thead>
+    <div class="column">
+        <table class="events">
+            <thead>
                 <th width="30">&#916;</th>
-				<th width="15">T</th>
-				<th width="15">C</th>
-				<th width="60">Event</th>								
-			</thead>
-		</table>
-	</div>
+                <th width="15">T</th>
+                <th width="15">C</th>
+                <th width="60">Event</th>								
+            </thead>
+        </table>
+    </div>
 
-	<div class="column">
+    <div class="column">
 
-		<div class="info">
-			<label>File Name:</label><span class="fileName"></span><br/>
-			<label>Format:</label><span class="formatType"></span>
-			<label>Tracks:</label><span class="trackCount"></span>
-			<label>Time:</label><span class="timeSig"></span><br/>
-			<label>BeatsPerMin:</label><span class="beatsPerMin"></span>
-			<label>TicksPerBeat:</label><span class="ticksPerBeat"></span></br>						
-			<label>McsPerBeat:</label><span class="mcsPerBeat"></span>
-			<label>TicksPerMin:</label><span class="ticksPerMin"></span></br>
-			<label>McsPerTick:</label><span class="mcsPerTick"></span>
-			<label>MlsPerTick:</label><span class="mlsPerTick"></span>
-		</div>
+        <div class="info">
+            <label>File Name:</label><span class="fileName"></span><br/>
+            <label>Format:</label><span class="formatType"></span>
+            <label>Tracks:</label><span class="trackCount"></span>
+            <label>Time:</label><span class="timeSig"></span><br/>
+            <label>BeatsPerMin:</label><span class="beatsPerMin"></span>
+            <label>TicksPerBeat:</label><span class="ticksPerBeat"></span></br>						
+            <label>McsPerBeat:</label><span class="mcsPerBeat"></span>
+            <label>TicksPerMin:</label><span class="ticksPerMin"></span></br>
+            <label>McsPerTick:</label><span class="mcsPerTick"></span>
+            <label>MlsPerTick:</label><span class="mlsPerTick"></span>
+        </div>
 
-		<div class="options">
-			<input id="types.meta" type="checkbox" checked="checked"/>
-			<label for="types.meta">Meta</label>
+        <div class="options">
+            <input id="types.meta" type="checkbox" checked="checked"/>
+            <label for="types.meta">Meta</label>
 
-			<input id="types.channel" type="checkbox" checked="checked"/>
-			<label for="types.channel">channel</label></br>
+            <input id="types.channel" type="checkbox" checked="checked"/>
+            <label for="types.channel">channel</label></br>
 
-			<input id="events.note-on" type="checkbox" checked="checked"/>
-			<label for="events.note-on">Note On</label>
+            <input id="events.note-on" type="checkbox" checked="checked"/>
+            <label for="events.note-on">Note On</label>
 
-			<input id="events.note-off" type="checkbox" checked="checked"/>
-			<label for="events.note-off">Note Off</label>
-		</div>
-	</div>
+            <input id="events.note-off" type="checkbox" checked="checked"/>
+            <label for="events.note-off">Note Off</label>
+        </div>
+    </div>
 
-	<script type="text/javascript">
+    <script type="text/javascript">
 
-	    $(function () {
+        $(function () {
 
-			var infoView = new Midi.Views.InfoView({el: ".info"});
-			var eventView = new Midi.Views.EventView({el: ".events"});
+            var infoView = new MidiView.views.Info(".info");
+            var eventView = new Midi.Views.EventView({el: ".events"});
 
-			$(".open").click(function(){
-				$("input[type='file']").click();
-			});
+            $(".open").click(function(){
+                $("input[type='file']").click();
+            });
 
-	        $("#files").change(function(evt){
+            $("#file-picker").change(function(evt){
+                var file = evt.target.files[0];
+                Midi.Reader.loadFile(file, function(midi){
+                    infoView.render(midi);
+                    eventView.render(midi);
+                })
+            });
 
-				var file = evt.target.files[0];
+            $(".options input[type='checkbox']").click(function(){
+                var option = $(this).attr("id").split(".");
+                var value = $(this).is(":checked");
+                eventView.options[option[0]][option[1]] = value;
+                eventView.render();
+            });
+        });
 
-				Midi.Reader.loadFile(file, function(midi){
-					infoView.render(midi);
-					eventView.render(midi);
-				})
-			});
-
-			$(".options input[type='checkbox']").click(function(){
-
-				var option = $(this).attr("id").split(".");
-				var value = $(this).is(":checked");
-
-				eventView.options[option[0]][option[1]] = value;
-				eventView.render();
-			});
-	    });
-
-	</script>
+    </script>
 
 </body>
 
