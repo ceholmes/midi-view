@@ -31,7 +31,7 @@ Midi.Names.Controllers =  {
 	43 : "Expression (fine)",
 	44 : "Effect Control 1 (fine)",
 	45 : "Effect Control 2 (fine)",
-	64 : "Hold Pedal (on/off)",
+	64 : "Hold Pedal",
 	65 : "Portamento (on/off)",
 	66 : "Sustenuto Pedal (on/off)",
 	67 : "Soft Pedal (on/off)",

@@ -8,8 +8,8 @@ MidiView.views.Event = function (el) {
     var _midiTypes = getMidiTypes();
     var _instruments = Midi.Names.Instruments;
     var _percussion = Midi.Names.Percussion;
-    var _notes = Midi.Names.Notes("sharp");
     var _controllers = Midi.Names.Controllers;
+    var _notes = Midi.Names.Notes("sharp");
 
     return {
         options : _options, 
@@ -53,7 +53,7 @@ MidiView.views.Event = function (el) {
 
     function buildEventHtml(event) {
         
-        var html = "<span>" + _midiTypes[event.type] + "</span>";
+        var html = "<span>" + _midiTypes[event.type] + ":</span>";
 
         switch (event.type) {
             case "text":
@@ -70,21 +70,21 @@ MidiView.views.Event = function (el) {
             case "note-off":
                 if (_options.noteNames) {
                     var name = (event.channel == 9) ? _percussion[event.note].toLowerCase() : _notes[event.note];
-                    html += "<span>note: " + name + "</span>";
+                    html += "<span>" + name + "</span>";
                 }
                 else {
-                    html += "<span>note: " + event.note + "</span>";
+                    html += "<span>" + event.note + "</span>";
                 }
                 html += "<span>velocity: " + event.velocity + "</span>";
                 break;
 
             case "note-aftertouch":
-                html += "<span>note: " + _notes[event.note] + "</span>";
+                html += "<span>" + _notes[event.note] + "</span>";
                 html += "<span>value: " + event.amount + "</span>";
                 break;
 
             case "controller":
-                html += "<span title='" + _controllers[event.controllerType] + "'>control: " + event.controllerType + "</span>";
+                html += "<span>" + _controllers[event.controllerType] + "</span>";
                 html += "<span>value: " + event.value + "</span>";
                 break;
 
@@ -93,15 +93,15 @@ MidiView.views.Event = function (el) {
                 break;
 
             case "channel-aftertouch":
-                html += "<span>value: " + event.amount + "</span>";
+                html += "<span>" + event.amount + "</span>";
                 break;
 
             case "pitch-bend":
-                html += "<span>value: " + event.value + "</span>";
+                html += "<span>" + event.value + "</span>";
                 break;
 
             case "channel-prefix":
-                html += "<span>channel: " + event.channelNumber + "</span>";
+                html += "<span>" + event.channelNumber + "</span>";
                 break;
 
             case "set-tempo":
@@ -121,7 +121,7 @@ MidiView.views.Event = function (el) {
                 break;
 
             case "sequence-number":
-            html += "<span>number: " + event.number + "</span>";
+            html += "<span>" + event.number + "</span>";
                 break;
         }
         
@@ -185,7 +185,7 @@ MidiView.views.Event = function (el) {
             "copyright": "Copyright",
             "track-name": "Track Name",
             "instrument": "Instrument.",
-            "lyrics": "lyrics",
+            "lyrics": "Lyrics",
             "marker": "Marker",
             "cue-point": "Cue",
             "note-on": "Note On",

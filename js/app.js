@@ -6,30 +6,33 @@ MidiView.App = function () {
     var _infoView = new MidiView.views.Info(".info");
     var _eventView = new MidiView.views.Event(".events");
     var _midi = null;
-
-    $(".open").click(function(){
-        $("input[type='file']").click();
-    });
-
-    $("#file-picker").change(function(evt){
-        var file = evt.target.files[0];
-        loadFile(file, function(midi){
-            _infoView.render(midi);
-            _eventView.render(midi);
-        });
-    });
-
-    $(".options input[type='checkbox']").click(function(){
-        var option = $(this).attr("id").split(".");
-        var value = $(this).is(":checked");
-        _eventView.options[option[0]][option[1]] = value;
-        _eventView.render(_midi);
-    });
-        
+    
+    $(".open").click(onOpenClick);   
+    $("#file-picker").change(onFileChange);
+    $(".options input[type='checkbox']").click(onOptionsChange);
 
     return {
         loadFile : loadFile
     };
+
+    function onOpenClick() {
+        $("input[type='file']").click();
+    }
+    
+    function onFileChange(e) {
+        var file = e.target.files[0];
+        loadFile(file, function(midi){
+            _infoView.render(midi);
+            _eventView.render(midi);
+        });
+    }
+    
+    function onOptionsChange() {
+        var option = $(this).attr("id").split(".");
+        var value = $(this).is(":checked");
+        _eventView.options[option[0]][option[1]] = value;
+        _eventView.render(_midi);
+    }
 
     function loadFile(file, callback) {
 
