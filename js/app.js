@@ -50,17 +50,17 @@ MidiView.App = function () {
 
         // get tempo
         var tempo = midi.tracks[0].filter(function(m){return m.type === 'set-tempo';})[0] || null;
-        tempo = tempo || { microsecondsPerBeat: (60000000 / 120) };
+        tempo = tempo || { tempo: (60000000 / 120) };
 
         // get time signature
         var timeSignature = midi.tracks[0].filter(function(m){return m.type === 'time-signature';})[0] || null;
         timeSignature = timeSignature || { numerator: 4, denominator: 4 };
 
         // calc info
-        var mcsPerBeat = tempo.microsecondsPerBeat;
+        var mcsPerBeat = tempo.tempo;
         var beatsPerMeasure = timeSignature.numerator;
         var beatsPerMin = Math.floor(60000000 / mcsPerBeat);
-        var ticksPerBeat = midi.header.timeDivision;
+        var ticksPerBeat = midi.header.division;
         var ticksPerMin = ticksPerBeat * beatsPerMin;
         var mcsPerTick = Math.floor(60000000 / ticksPerMin);
         var mlsPerTick = Math.floor(mcsPerTick / 1000);
@@ -68,7 +68,7 @@ MidiView.App = function () {
         midi.info = {
             formatType : midi.header.type,
             trackCount : midi.header.trackCount,
-            ticksPerBeat : midi.header.timeDivision,
+            ticksPerBeat : midi.header.division,
             mcsPerBeat : mcsPerBeat,
             beatsPerMeasure : beatsPerMeasure,
             beatsPerMin : beatsPerMin,

@@ -59,10 +59,12 @@ MidiView.views.Event = function (el) {
             case "text":
             case "copyright":
             case "track-name":
-            case "instrument":
+            case "instrument-name":
             case "lyrics":
             case "marker":
             case "cue-point":
+            case "program-name":
+            case "device-name":
                 html += ("<span>" + event.text + "<span>");
                 break;
 
@@ -78,9 +80,9 @@ MidiView.views.Event = function (el) {
                 html += "<span>velocity: " + event.velocity + "</span>";
                 break;
 
-            case "note-aftertouch":
+            case "key-pressure":
                 html += "<span>" + _notes[event.note] + "</span>";
-                html += "<span>value: " + event.amount + "</span>";
+                html += "<span>pressure: " + event.amount + "</span>";
                 break;
 
             case "controller":
@@ -89,11 +91,11 @@ MidiView.views.Event = function (el) {
                 break;
 
             case "program-change":
-                html += "<span>" + _instruments[event.programNumber] + "</span>";
+                html += "<span>" + _instruments[event.program] + "</span>";
                 break;
 
-            case "channel-aftertouch":
-                html += "<span>" + event.amount + "</span>";
+            case "channel-pressure":
+                html += "<span>" + event.pressure + "</span>";
                 break;
 
             case "pitch-bend":
@@ -101,11 +103,15 @@ MidiView.views.Event = function (el) {
                 break;
 
             case "channel-prefix":
-                html += "<span>" + event.channelNumber + "</span>";
+                html += "<span>" + event.channel + "</span>";
                 break;
 
+            case "midi-port":
+                html += "<span>" + event.port + "</span>";
+                break;                
+
             case "set-tempo":
-                html += "<span>" + event.microsecondsPerBeat + " mpb</span>";
+                html += "<span>" + event.tempo + " mpb</span>";
                 break;
 
             case "smpte-offset":
@@ -121,7 +127,7 @@ MidiView.views.Event = function (el) {
                 break;
 
             case "sequence-number":
-            html += "<span>" + event.number + "</span>";
+            html += "<span>" + event.value + "</span>";
                 break;
         }
         
@@ -184,19 +190,22 @@ MidiView.views.Event = function (el) {
             "text": "Text",
             "copyright": "Copyright",
             "track-name": "Track Name",
-            "instrument": "Instrument.",
+            "instrument-name": "Instrument.",
             "lyrics": "Lyrics",
             "marker": "Marker",
             "cue-point": "Cue",
             "note-on": "Note On",
             "note-off": "Note Off",
-            "note-aftertouch": "Key Pressure",
+            "key-pressure": "Key Pressure",
             "controller": "Controller",
             "program-change": "Program",
-            "channel-aftertouch": "Channel Pressure",
+            "channel-pressure": "Channel Pressure",
             "pitch-bend": "Pitch Bend",
             "channel-prefix": "Channel Prefix",
-            "end-track": "End of Track",
+            "device-name" : "Device",
+            "program-name" : "Program",
+            "midi-port" : "Midi Port",
+            "end-of-track": "End of Track",
             "set-tempo": "Tempo",
             "smpte-offset": "SMTP",
             "time-signature": "Time Signature",
